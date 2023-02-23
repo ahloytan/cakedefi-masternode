@@ -1,0 +1,55 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  width: 182px;
+  height: 58px;
+}
+
+.App-header {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: calc(10px + 2vmin);
+  padding: 20px 30px; 
+}
+
+.rightMenuHolder{
+  justify-content: center;
+  display: flex;
+}
+
+.hamburger{
+  fill: #6400ff;
+  scale: 1.75; 
+  margin: 16px;
+}
+
+#buyCryptoBtn{
+  color: rgb(91, 16, 255);
+  background-color: rgb(241, 233, 254);
+  padding: 10px 16px;
+  font-size: 1.6rem;
+  border-radius: 4px;
+  border: 1px solid rgba(91, 16, 255, 0.08);
+  opacity: 1;
+}
+
+.dashDeFiLogo{
+  width: 64px;
+  height: 64px;
+}
+
+.total{
+  font-size: 64px;
+}
+
+.values{
+  font-size: 26px;
+}
+
+.mainBox{
+  background-color: '#f4f3f7'
+}
