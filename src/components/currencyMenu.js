@@ -5,15 +5,16 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function BasicSelect() {
-  const [currency, setAge] = React.useState('');
+const CurrencyMenu = (props) =>  {
+  const [currency, setCurrency] = React.useState('');
 
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setCurrency(event.target.value);
+    props.setCurrency(event.target.value);
   };
 
   return (
-    <Box sx={{ width: 150, margin: '0 auto', paddingTop: '20px'}}>
+    <Box sx={{width: 150, margin: '0 auto', paddingTop: '20px'}}>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Currency</InputLabel>
         <Select
@@ -23,13 +24,14 @@ export default function BasicSelect() {
           label="Currency"
           onChange={handleChange}
         >
-          <MenuItem value={10}>SGD</MenuItem>
-          <MenuItem value={20}>HBAR</MenuItem>
-          <MenuItem value={30}>BTC</MenuItem>
-          <MenuItem value={30}>USD</MenuItem>
-          <MenuItem value={30}>EUR</MenuItem>
+          <MenuItem value={"SGD"}>SGD</MenuItem>
+          <MenuItem value={"BTC"}>BTC</MenuItem>
+          <MenuItem value={"USD"}>USD</MenuItem>
+          <MenuItem value={"EUR"}>EUR</MenuItem>
         </Select>
       </FormControl>
     </Box>
   );
 }
+
+export default CurrencyMenu;

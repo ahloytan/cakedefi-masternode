@@ -44,12 +44,17 @@
 
 .total{
   font-size: 64px;
+  margin-bottom: 15px;
 }
 
 .values{
   font-size: 26px;
 }
 
-.mainBox{
-  background-color: '#f4f3f7'
+#mainBox{
+  background-color: #f4f3f7;
+}
+
+#donut{
+  margin: 0 auto;
 }

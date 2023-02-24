@@ -3,6 +3,8 @@ import './App.css';
 import MasterNodes from './components/masternodes.js';
 import Button from '@mui/material/Button';
 import * as React from 'react';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 function App() {
   return (
