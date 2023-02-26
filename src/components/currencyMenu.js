@@ -24,10 +24,10 @@ const CurrencyMenu = (props) =>  {
           label="Currency"
           onChange={handleChange}
         >
-          <MenuItem value={"SGD"}>SGD</MenuItem>
-          <MenuItem value={"BTC"}>BTC</MenuItem>
-          <MenuItem value={"USD"}>USD</MenuItem>
-          <MenuItem value={"EUR"}>EUR</MenuItem>
+          <MenuItem value={"sgd"}>SGD</MenuItem>
+          <MenuItem value={"bitcoin"}>BTC</MenuItem>
+          <MenuItem value={"usd"}>USD</MenuItem>
+          <MenuItem value={"eur"}>EUR</MenuItem>
         </Select>
       </FormControl>
     </Box>
