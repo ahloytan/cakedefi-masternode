@@ -16,18 +16,18 @@ const CurrencyMenu = (props) =>  {
   return (
     <Box sx={{width: 150, margin: '0 auto', paddingTop: '20px'}}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Currency</InputLabel>
+        <InputLabel id='demo-simple-select-label'>Currency</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          labelId='demo-simple-select-label'
+          id='demo-simple-select'
           value={currency}
-          label="Currency"
+          label='Currency'
           onChange={handleChange}
         >
-          <MenuItem value={"sgd"}>SGD</MenuItem>
-          <MenuItem value={"bitcoin"}>BTC</MenuItem>
-          <MenuItem value={"usd"}>USD</MenuItem>
-          <MenuItem value={"eur"}>EUR</MenuItem>
+          <MenuItem value={'sgd'}>SGD</MenuItem>
+          <MenuItem value={'bitcoin'}>BTC</MenuItem>
+          <MenuItem value={'usd'}>USD</MenuItem>
+          <MenuItem value={'eur'}>EUR</MenuItem>
         </Select>
       </FormControl>
     </Box>
