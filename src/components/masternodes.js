@@ -61,6 +61,7 @@ export default class MasterNodes extends React.Component {
 
         const responses = await Promise.all([getMasterNodes(), getRates()])
         const masterNodes = await responses[0]
+
         const rates = await responses[1]
         
         for (let i=0; i<masterNodes.length; i++) {
@@ -69,7 +70,7 @@ export default class MasterNodes extends React.Component {
                 continue
             }
 
-            if (masterNode['coin'] === 'DeFi'){
+            if (masterNode['coin'] === 'DeFiChain'){
                 defiChainAssets.push(masterNode)
                 defiChainSum += strToFloat(masterNode)
             } else if (masterNode['coin'] === 'Dash'){
@@ -85,7 +86,6 @@ export default class MasterNodes extends React.Component {
         data.datasets[0].data = [chartDashVal, chartDefiVal]
         totalAUMDisplay = totalAUMBase
         this.setState({rates, masterNodes, dashAssets, defiChainAssets, totalAUMBase, totalAUMDisplay});
-
     }
 
     render() {
