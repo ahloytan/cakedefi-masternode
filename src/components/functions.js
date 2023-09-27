@@ -1,7 +1,7 @@
 import axios from 'axios';
-
+const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/'; //https://github.com/Rob--W/cors-anywhere/issues/301
 function getMasterNodes(){
-    var masterNodes = axios.get(`https://api.cakedefi.com/nodes?order=status&orderBy=DESC`)
+    var masterNodes = axios.get(`${corsProxyUrl}https://api.cakedefi.com/nodes?order=status&orderBy=DESC`)
         .then(res => {
             return res.data;
         })
