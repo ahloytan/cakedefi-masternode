@@ -1,7 +1,35 @@
 #donut{
-  width: 200px;
-  height: 200px;
+  height: 350px;
+  width: 350px;
   margin: 0 auto;
+
+}
+
+.coins {
+  width: 50px;
+  height: 50px;
+}
+
+.assets {
+  max-height: 350px;
+  overflow-y: scroll;
+}
+
+@media (min-width: 768px) {
+  #donut {
+    height: 250px;
+    width: auto;
+  }
+
+  .coins {
+    width: auto;
+    height: auto;
+  }
+
+  .assets {
+    max-height: 700px;
+    overflow: auto;
+  }
 }
 
 .hideOverflow {

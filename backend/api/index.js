@@ -12,8 +12,8 @@ app.get('/', (req, res) => {
 
 app.get('/get_master_nodes', async (req, res) => {
   try {
-    const apiResponse = await axios.get('https://api.cakedefi.com/nodes?order=status&orderBy=DESC');
-    res.json(apiResponse.data);
+    const {data} = await axios.get('https://api.cakedefi.com/nodes?order=status&orderBy=DESC');
+    res.json(data);
   } catch (error) {
     console.error('Error fetching master nodes:', error.message);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -22,10 +22,10 @@ app.get('/get_master_nodes', async (req, res) => {
 
 app.get('/get_rates', async (req, res) => {
     try {
-      const apiResponse = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin,defichain,dash&vs_currencies=sgd,eur,usd&precision=4');
-      res.json(apiResponse.data);
+      const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin,defichain,dash&vs_currencies=sgd,eur,usd&precision=4');
+      res.json(data);
     } catch (error) {
-      console.error('Error fetching rates:', error.message);
+      console.error('Error fetching rates:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });

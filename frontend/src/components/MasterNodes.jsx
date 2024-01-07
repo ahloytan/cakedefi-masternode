@@ -1,22 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import Grid from '@mui/material/Grid';
-import CoinHeader from './CoinHeader.jsx';
-import AssetValue from './AssetValue.jsx';
-import ethLogo from '../assets/eth.webp';
-import defiLogo from '../assets/defichain.webp';
-import CurrencyMenu from './CurrencyMenu.jsx';
+import { useState, useEffect } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import LoadingScreen from './LoadingScreen.jsx'
-import { getMasterNodes, getRates, strToFloat } from '../utils/functions.js';
-import SideBar from './SideBar.jsx'
+import { getMasterNodes, getRates } from '../utils/functions.js';
 import { coins, baseCurrency } from '../mixins/variables.js'
 
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import Toolbar from '@mui/material/Toolbar';
+import CoinHeader from './CoinHeader.jsx';
+import AssetValue from './AssetValue.jsx';
+import CurrencyMenu from './CurrencyMenu.jsx';
+import LoadingScreen from './LoadingScreen.jsx'
+import SideBar from './SideBar.jsx'
+
+import ethLogo from '../assets/eth.webp';
+import defiLogo from '../assets/defichain.webp';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const data = {
-    labels: ['ETH', 'Defi'],
+    labels: ['ETH', 'DeFi'],
     datasets: [
       {
         label: 'Total Asset Value',
@@ -31,6 +35,7 @@ const data = {
 const MasterNodes = () => {
     const {eth, defi, btc} = coins;
     const [isLoading, setIsLoading] = useState(true);
+    const [mobileOpen, setMobileOpen] = useState(false);
     const [state, setState] = useState({
         rates: {},
         currency: baseCurrency,
@@ -55,33 +60,30 @@ const MasterNodes = () => {
         setState({ ...state, totalAUMDisplay, currency });
     };
 
+    const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
+
     useEffect(() => {
         const fetchData = async () => {
-            let ethAssets = [];
-            let defiChainAssets = [];
-            let ethSum = 0;
-            let defiChainSum = 0;
-            let totalAUMBase = 0;
-            let totalAUMDisplay = 0;
+            let ethAssets = [],  defiChainAssets = [];
+            let ethSum = 0, defiChainSum = 0, totalAUMBase = 0, totalAUMDisplay = 0;
+            const [masterNodes, rates] = await Promise.all([getMasterNodes(), getRates()]); 
 
-            const responses = await Promise.all([getMasterNodes(), getRates()]); 
-            const masterNodes = await responses[0];
-            const rates =  await responses[1];
-
-            for (let i = 0; i < masterNodes.length; i++) {
-                let masterNode = masterNodes[i];
-                if (masterNode['status'] !== 'ACTIVE') continue;
+            for (let node of masterNodes) {
+                let {status, coin, lastReward: {amount: {amount}}} = node;
+                if (status !== 'ACTIVE') continue;
+                totalAUMBase += parseFloat(amount);
+            
+                if (coin === 'DeFiChain') {
+                    defiChainAssets.push(node);
+                    defiChainSum += parseFloat(amount);
+                    continue;
+                } 
                 
-
-                if (masterNode['coin'] === 'DeFiChain') {
-                    defiChainAssets.push(masterNode);
-                    defiChainSum += strToFloat(masterNode);
-                } else if (masterNode['coin'] === 'Ether') {
-                    ethAssets.push(masterNode);
-                    ethSum += strToFloat(masterNode);
+                if (coin === 'Ether') {
+                    ethAssets.push(node);
+                    ethSum += parseFloat(amount);
+                    continue;
                 }
-
-                totalAUMBase += strToFloat(masterNode);
             }
 
             let chartETHVal = ethSum * rates[eth][baseCurrency];
@@ -96,39 +98,51 @@ const MasterNodes = () => {
         fetchData();
     }, []);
 
-    if (isLoading) {
-        return <LoadingScreen />;
-    }
+    if (isLoading) return <LoadingScreen />;
+    
 
     return (
-        <Grid container>
-            <Grid item xs={2}>
-                <SideBar />
-            </Grid>
-            <Grid item xs={10}>
-                <CurrencyMenu setCurrency={setCurrency}></CurrencyMenu>
-                <div className="text-center my-12">
-                    <h1>Total Assets:</h1>
-                    <h2>
-                        ${parseFloat(state.totalAUMDisplay).toFixed(4)} {state.currency.toUpperCase()}
-                    </h2>
-                </div>
-
-                <div className="text-center my-12">
-                    <Doughnut id='donut' options={{ maintainAspectRatio: false }} data={data} redraw={true} />
-                </div>
-
-                <Grid container spacing={{ sm: 0, md: 2, lg: 2 }} className="text-center mb-12">
-                    <CoinHeader name={'ETH'} logo={ethLogo} len={state.ethAssets.length}></CoinHeader>
-                    <CoinHeader name={'DeFi'} logo={defiLogo} len={state.defiChainAssets.length}></CoinHeader>
+        <>
+            <Toolbar>
+            <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: { sm: 'none' } }}
+            >
+                <MenuIcon />
+            </IconButton>
+            </Toolbar>
+            <Grid container>
+                <Grid item xs={0} md={2}>
+                    <SideBar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}/>
                 </Grid>
+                <Grid item xs={12} md={10}>
+                    <CurrencyMenu setCurrency={setCurrency}></CurrencyMenu>
+                    <div className="text-center my-6 sm:my-12">
+                        <h1>Total Assets:</h1>
+                        <h2 className="text-2xl sm:text-4xl">
+                            ${parseFloat(state.totalAUMDisplay).toFixed(4)} {state.currency.toUpperCase()}
+                        </h2>
+                    </div>
 
-                <Grid container>
-                    <AssetValue arr={state.ethAssets} rates={state.rates} coin={eth}></AssetValue>
-                    <AssetValue arr={state.defiChainAssets} rates={state.rates} coin={defi}></AssetValue>
+                    <div className="text-center my-12">
+                        <Doughnut id='donut' options={{ maintainAspectRatio: false }} data={data} redraw={true} />
+                    </div>
+
+                    <Grid container spacing={{ sm: 0, md: 2, lg: 2 }} className="text-center mb-12">
+                        <CoinHeader name={'Ethereum'} logo={ethLogo} len={state.ethAssets.length}></CoinHeader>
+                        <CoinHeader name={'DeFiChain'} logo={defiLogo} len={state.defiChainAssets.length}></CoinHeader>
+                    </Grid>
+
+                    <Grid container className="px-8 mb-8 sm:mb-16">
+                        <AssetValue arr={state.ethAssets} rates={state.rates} coin={eth}></AssetValue>
+                        <AssetValue arr={state.defiChainAssets} rates={state.rates} coin={defi}></AssetValue>
+                    </Grid>
                 </Grid>
             </Grid>
-        </Grid>
+        </>
     );
 };
 

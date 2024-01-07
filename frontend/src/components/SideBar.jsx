@@ -36,13 +36,8 @@ const drawer = (
   </div>
 );
 
-const SideBar = () => {
-    const [mobileOpen, setMobileOpen] = useState(false);
-  
-    const handleDrawerToggle = () => {
-      setMobileOpen(!mobileOpen);
-    };
-  
+const SideBar = ({mobileOpen, handleDrawerToggle}) => {
+
     return (
       <>
         <Drawer

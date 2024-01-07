@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 const API_BASE_URL = import.meta.env.VITE_NODE_ENV === 'production' ? import.meta.env.VITE_BE_URL : 'http://localhost:8888';
 async function getMasterNodes(){
     var masterNodes = await axios.get(`${API_BASE_URL}/get_master_nodes`)
@@ -17,12 +18,11 @@ function getRates(){
         .then(res => {
             return res.data
         })
-
+        .catch(error => {
+            console.error('Error fetching rates:', error);
+            throw error;
+        });
     return rates
 }
 
-function strToFloat(node){
-    return parseFloat(node['lastReward']['amount']['amount'])
-}
-
-export {getMasterNodes, getRates, strToFloat};
+export {getMasterNodes, getRates};
