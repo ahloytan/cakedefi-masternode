@@ -4,15 +4,15 @@ import { Doughnut } from 'react-chartjs-2';
 import { getMasterNodes, getRates } from '../utils/functions.js';
 import { coins, baseCurrency } from '../mixins/variables.js'
 
-import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
+import { Grid, IconButton, Menu as MenuIcon, Toolbar, useMediaQuery } from '@mui/material';
+
 import CoinHeader from './CoinHeader.jsx';
 import AssetValue from './AssetValue.jsx';
 import CurrencyMenu from './CurrencyMenu.jsx';
 import LoadingScreen from './LoadingScreen.jsx'
+import Header from './Header.jsx'
 import SideBar from './SideBar.jsx'
+import Footer from './Footer.jsx'
 
 import ethLogo from '../assets/eth.webp';
 import defiLogo from '../assets/defichain.webp';
@@ -20,7 +20,7 @@ import defiLogo from '../assets/defichain.webp';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const data = {
-    labels: ['ETH', 'DeFi'],
+    labels: ['Ethereum', 'DeFiChain'],
     datasets: [
       {
         label: 'Total Asset Value',
@@ -35,6 +35,7 @@ const data = {
 const MasterNodes = () => {
     const {eth, defi, btc} = coins;
     const [isLoading, setIsLoading] = useState(true);
+    const isMobile = useMediaQuery('(max-width:767px)');
     const [mobileOpen, setMobileOpen] = useState(false);
     const [state, setState] = useState({
         rates: {},
@@ -103,22 +104,18 @@ const MasterNodes = () => {
 
     return (
         <>
-            <Toolbar>
-            <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                edge="start"
-                onClick={handleDrawerToggle}
-                sx={{ mr: 2, display: { sm: 'none' } }}
-            >
-                <MenuIcon />
-            </IconButton>
-            </Toolbar>
+            {isMobile && <Toolbar>
+                <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: 'none' } }}>
+                    <MenuIcon />
+                </IconButton>
+            </Toolbar>}
             <Grid container>
                 <Grid item xs={0} md={2}>
                     <SideBar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}/>
                 </Grid>
                 <Grid item xs={12} md={10}>
+                    <Header></Header>
+
                     <CurrencyMenu setCurrency={setCurrency}></CurrencyMenu>
                     <div className="text-center my-6 sm:my-12">
                         <h1>Total Assets:</h1>
@@ -128,7 +125,7 @@ const MasterNodes = () => {
                     </div>
 
                     <div className="text-center my-12">
-                        <Doughnut id='donut' options={{ maintainAspectRatio: false }} data={data} redraw={true} />
+                        <Doughnut id='donut' options={{ maintainAspectRatio: false }} data={data} redraw={true}/>
                     </div>
 
                     <Grid container spacing={{ sm: 0, md: 2, lg: 2 }} className="text-center mb-12">
@@ -136,10 +133,12 @@ const MasterNodes = () => {
                         <CoinHeader name={'DeFiChain'} logo={defiLogo} len={state.defiChainAssets.length}></CoinHeader>
                     </Grid>
 
-                    <Grid container className="px-8 mb-8 sm:mb-16">
+                    <Grid container className="px-8 mb-8">
                         <AssetValue arr={state.ethAssets} rates={state.rates} coin={eth}></AssetValue>
+                        <Grid item xs={0} md={1}></Grid>
                         <AssetValue arr={state.defiChainAssets} rates={state.rates} coin={defi}></AssetValue>
                     </Grid>
+                    <Footer></Footer>
                 </Grid>
             </Grid>
         </>
