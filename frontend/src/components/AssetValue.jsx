@@ -1,5 +1,4 @@
 import { Grid } from '@mui/material';
-import { baseCurrency } from '../mixins/variables.js'
 
 const AssetValue = (props) =>  {
     return (
@@ -15,11 +14,11 @@ const AssetValue = (props) =>  {
             </Grid>
             <div className="assets mb-8 sm:mb-0">
                 {props.arr.map((d) => 
-                    <div key={d.address} className='flex '>
+                    <div key={d.address} className='flex'>
                         <Grid item xs={7} md={8} className='hideOverflow'>{d['address']}</Grid>
                         <Grid item xs={1}></Grid>
                         <Grid item xs={4} md={3}>
-                            ${(d['lastReward']['amount']['amount'] * props.rates[props.coin][baseCurrency]).toFixed(8)}
+                            ${d['lastReward']['amount']['amount']}
                         </Grid>
                     </div>
                 )}          

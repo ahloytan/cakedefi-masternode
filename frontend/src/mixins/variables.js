@@ -5,3 +5,5 @@ export const coins = {
 }
 
 export const baseCurrency = 'usd';
+export const defiChain = 'DeFiChain';
+export const ethereum = 'Ethereum';

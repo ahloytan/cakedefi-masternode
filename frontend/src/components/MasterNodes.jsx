@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { getMasterNodes, getRates } from '../utils/functions.js';
-import { coins, baseCurrency } from '../mixins/variables.js'
+import { coins, baseCurrency, ethereum, defiChain } from '../mixins/variables.js'
 
 import { Grid, IconButton, Menu as MenuIcon, Toolbar, useMediaQuery } from '@mui/material';
 
@@ -19,19 +19,6 @@ import defiLogo from '../assets/defichain.webp';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const data = {
-    labels: ['Ethereum', 'DeFiChain'],
-    datasets: [
-      {
-        label: 'Total Asset Value',
-        data: [5, 5],
-        backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)'],
-        borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],
-        borderWidth: 1,
-      },
-    ],
-};
-
 const MasterNodes = () => {
     const {eth, defi, btc} = coins;
     const [isLoading, setIsLoading] = useState(true);
@@ -45,13 +32,26 @@ const MasterNodes = () => {
         defiChainAssets: [],
         totalAUMBase: 0,
         totalAUMDisplay: 0,
+        chart: {
+            labels: [ethereum, defiChain],
+            datasets: [
+              {
+                label: 'Total Asset Value',
+                data: [5, 5],
+                backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)'],
+                borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],
+                borderWidth: 1,
+              },
+            ],
+        }
     });
 
     const setCurrency = (currency) => {
-        let nonCrypto = ['sgd', 'eur', baseCurrency];
+        let fiatCurrency = ['sgd', 'eur', baseCurrency];
         let totalAUMDisplay = 0;
 
-        if (nonCrypto.indexOf(currency) !== -1) {
+        const isFiatCurrency = fiatCurrency.includes(currency);
+        if (isFiatCurrency) {
             let usdConversion = state.rates[btc][currency] / state.rates[btc][baseCurrency];
             totalAUMDisplay = state.totalAUMBase * usdConversion;
         } else {
@@ -59,6 +59,21 @@ const MasterNodes = () => {
         }
 
         setState({ ...state, totalAUMDisplay, currency });
+    };
+
+    const updateChartProperty = (newData) => {
+        setState((prevState) => ({
+          ...prevState,
+          chart: {
+            ...prevState.chart,
+            datasets: [
+              {
+                ...prevState.chart.datasets[0],
+                data: newData,
+              },
+            ],
+          },
+        }));
     };
 
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
@@ -74,7 +89,7 @@ const MasterNodes = () => {
                 if (status !== 'ACTIVE') continue;
                 totalAUMBase += parseFloat(amount);
             
-                if (coin === 'DeFiChain') {
+                if (coin === defiChain) {
                     defiChainAssets.push(node);
                     defiChainSum += parseFloat(amount);
                     continue;
@@ -89,10 +104,10 @@ const MasterNodes = () => {
 
             let chartETHVal = ethSum * rates[eth][baseCurrency];
             let chartDefiVal = defiChainSum * rates[defi][baseCurrency];
-            data.datasets[0].data = [chartETHVal, chartDefiVal];
             totalAUMDisplay = totalAUMBase;
 
             setState({ ...state, rates, masterNodes, ethAssets, defiChainAssets, totalAUMBase, totalAUMDisplay });
+            updateChartProperty([chartETHVal, chartDefiVal]);
             setIsLoading(false);
         };
 
@@ -125,12 +140,12 @@ const MasterNodes = () => {
                     </div>
 
                     <div className="text-center my-12">
-                        <Doughnut id='donut' options={{ maintainAspectRatio: false }} data={data} redraw={true}/>
+                        <Doughnut id='donut' options={{ maintainAspectRatio: false }} data={state.chart} redraw={true}/>
                     </div>
 
                     <Grid container spacing={{ sm: 0, md: 2, lg: 2 }} className="text-center mb-12">
-                        <CoinHeader name={'Ethereum'} logo={ethLogo} len={state.ethAssets.length}></CoinHeader>
-                        <CoinHeader name={'DeFiChain'} logo={defiLogo} len={state.defiChainAssets.length}></CoinHeader>
+                        <CoinHeader name={ethereum} logo={ethLogo} len={state.ethAssets.length}></CoinHeader>
+                        <CoinHeader name={defiChain} logo={defiLogo} len={state.defiChainAssets.length}></CoinHeader>
                     </Grid>
 
                     <Grid container className="px-8 mb-8">

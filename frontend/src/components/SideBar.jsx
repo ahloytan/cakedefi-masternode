@@ -2,7 +2,7 @@ import Toolbar from '@mui/material/Toolbar';
 import { Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, Drawer } from '@mui/material';
 import { Web as WebIcon, GitHub, CurrencyBitcoin as CurrencyBitcoinIcon } from '@mui/icons-material';
 
-const drawerWidth = 200;
+const drawerWidth = 240;
 const links = ['https://ahloytan.netlify.app/', 'https://github.com/ahloytan']
 const nftLinks = ['https://sentx.io/nft-marketplace/dpgc-0.0.878200/2633', 'https://magiceden.io/collections/polygon/0x50d2915927255109570d9f72ebeb8cb477df508e']
 const drawer = (
