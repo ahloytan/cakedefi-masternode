@@ -4,8 +4,8 @@ const Header = () => {
 
     return (
         <div>
-            <Typography component="h1" variant="h2" align="center" color="text.primary" gutterBottom className="pt-0 md:pt-8">
-                MasterNodes
+            <Typography component="h1" variant="h2" align="center" color="text.primary" gutterBottom className="pt-4 md:pt-8">
+                Masternodes
             </Typography>
             <Typography variant="h6" align="center" color="text.secondary" paragraph fontStyle="italic" className="px-16">
                 A simple web application that reflect the master nodes from Ethereum & DeFiChain. 

@@ -4,14 +4,15 @@ import { Doughnut } from 'react-chartjs-2';
 import { getMasterNodes, getRates } from '../utils/functions.js';
 import { coins, baseCurrency, ethereum, defiChain } from '../mixins/variables.js'
 
-import { Grid, IconButton, Menu as MenuIcon, Toolbar, useMediaQuery } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import CoinHeader from './CoinHeader.jsx';
 import AssetValue from './AssetValue.jsx';
 import CurrencyMenu from './CurrencyMenu.jsx';
 import LoadingScreen from './LoadingScreen.jsx'
 import Header from './Header.jsx'
-import SideBar from './SideBar.jsx'
+import SideBar from './nav/SideBar.jsx'
+import TopNav from './nav/TopNav.jsx'
 import Footer from './Footer.jsx'
 
 import ethLogo from '../assets/eth.webp';
@@ -22,7 +23,6 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const MasterNodes = () => {
     const {eth, defi, btc} = coins;
     const [isLoading, setIsLoading] = useState(true);
-    const isMobile = useMediaQuery('(max-width:767px)');
     const [mobileOpen, setMobileOpen] = useState(false);
     const [state, setState] = useState({
         rates: {},
@@ -76,8 +76,6 @@ const MasterNodes = () => {
         }));
     };
 
-    const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
-
     useEffect(() => {
         const fetchData = async () => {
             let ethAssets = [],  defiChainAssets = [];
@@ -85,7 +83,8 @@ const MasterNodes = () => {
             const [masterNodes, rates] = await Promise.all([getMasterNodes(), getRates()]); 
 
             for (let node of masterNodes) {
-                let {status, coin, lastReward: {amount: {amount}}} = node;
+                let {status, coin, lastReward} = node;
+                let amount = lastReward?.amount?.amount ?? null;
                 if (status !== 'ACTIVE') continue;
                 totalAUMBase += parseFloat(amount);
             
@@ -119,14 +118,10 @@ const MasterNodes = () => {
 
     return (
         <>
-            {isMobile && <Toolbar>
-                <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: 'none' } }}>
-                    <MenuIcon />
-                </IconButton>
-            </Toolbar>}
+            <TopNav open={() => setMobileOpen(true)}/>
             <Grid container>
                 <Grid item xs={0} md={2}>
-                    <SideBar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}/>
+                    <SideBar open={mobileOpen} onClose={() => setMobileOpen(false)}/>
                 </Grid>
                 <Grid item xs={12} md={10}>
                     <Header></Header>
