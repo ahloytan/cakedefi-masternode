@@ -1,8 +1,8 @@
 import './App.css'
-import MasterNodes from './components/MasterNodes.jsx';
+import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from './theme/index.js';
-import { CssBaseline } from '@mui/material';
+import MasterNodes from './components/MasterNodes.jsx';
 
 function App() {
   const theme = createTheme();

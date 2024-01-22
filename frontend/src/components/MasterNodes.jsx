@@ -21,9 +21,10 @@ import defiLogo from '../assets/defichain.webp';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const MasterNodes = () => {
+    
     const {eth, defi, btc} = coins;
     const [isLoading, setIsLoading] = useState(true);
-    const [mobileOpen, setMobileOpen] = useState(false);
+    const [isNavbarOpen, setNavbarStatus] = useState(false);
     const [state, setState] = useState({
         rates: {},
         currency: baseCurrency,
@@ -45,6 +46,7 @@ const MasterNodes = () => {
             ],
         }
     });
+    
 
     const setCurrency = (currency) => {
         let fiatCurrency = ['sgd', 'eur', baseCurrency];
@@ -84,7 +86,7 @@ const MasterNodes = () => {
 
             for (let node of masterNodes) {
                 let {status, coin, lastReward} = node;
-                let amount = lastReward?.amount?.amount ?? null;
+                let amount = lastReward?.amount?.amount ?? 0;
                 if (status !== 'ACTIVE') continue;
                 totalAUMBase += parseFloat(amount);
             
@@ -115,15 +117,14 @@ const MasterNodes = () => {
 
     if (isLoading) return <LoadingScreen />;
     
-
     return (
         <>
-            <TopNav open={() => setMobileOpen(true)}/>
+            <TopNav open={() => setNavbarStatus(true)}/>
             <Grid container>
-                <Grid item xs={0} md={2}>
-                    <SideBar open={mobileOpen} onClose={() => setMobileOpen(false)}/>
+                <Grid item xs={0} md={3} lg={2}>
+                    <SideBar open={isNavbarOpen} onClose={() => setNavbarStatus(false)}/>
                 </Grid>
-                <Grid item xs={12} md={10}>
+                <Grid item xs={12} md={9} lg={10}>
                     <Header></Header>
 
                     <CurrencyMenu setCurrency={setCurrency}></CurrencyMenu>
@@ -135,18 +136,18 @@ const MasterNodes = () => {
                     </div>
 
                     <div className="text-center my-12">
-                        <Doughnut id='donut' options={{ maintainAspectRatio: false }} data={state.chart} redraw={true}/>
+                        <Doughnut id='donut' options={{ maintainAspectRatio: false }} data={state.chart}/>
                     </div>
 
                     <Grid container spacing={{ sm: 0, md: 2, lg: 2 }} className="text-center mb-12">
-                        <CoinHeader name={ethereum} logo={ethLogo} len={state.ethAssets.length}></CoinHeader>
-                        <CoinHeader name={defiChain} logo={defiLogo} len={state.defiChainAssets.length}></CoinHeader>
+                        <CoinHeader name={ethereum} logo={ethLogo} length={state.ethAssets.length}></CoinHeader>
+                        <CoinHeader name={defiChain} logo={defiLogo} length={state.defiChainAssets.length}></CoinHeader>
                     </Grid>
 
                     <Grid container className="px-8 mb-8">
-                        <AssetValue arr={state.ethAssets} rates={state.rates} coin={eth}></AssetValue>
+                        <AssetValue records={state.ethAssets}></AssetValue>
                         <Grid item xs={0} md={1}></Grid>
-                        <AssetValue arr={state.defiChainAssets} rates={state.rates} coin={defi}></AssetValue>
+                        <AssetValue records={state.defiChainAssets}></AssetValue>
                     </Grid>
                     <Footer></Footer>
                 </Grid>

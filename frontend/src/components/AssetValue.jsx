@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
+import { memo } from 'react';
 
-const AssetValue = (props) =>  {
+const AssetValue = ({records}) =>  {
     return (
         <Grid item xs={12} md={5}>
             <Grid item xs={12} className="flex">
@@ -13,12 +14,12 @@ const AssetValue = (props) =>  {
                 </Grid>
             </Grid>
             <div className="assets mb-8 sm:mb-0">
-                {props.arr.map((d) => 
-                    <div key={d.address} className='flex'>
-                        <Grid item xs={7} md={8} className='hideOverflow'>{d['address']}</Grid>
+                {records.map((record) => 
+                    <div key={record.address} className='flex'>
+                        <Grid item xs={7} md={8} className='hideOverflow'>{record['address']}</Grid>
                         <Grid item xs={1}></Grid>
                         <Grid item xs={4} md={3}>
-                            ${d['lastReward']['amount']['amount']}
+                            ${record['lastReward']['amount']['amount']}
                         </Grid>
                     </div>
                 )}          
@@ -27,4 +28,4 @@ const AssetValue = (props) =>  {
     );
 }
 
-export default AssetValue;
+export default memo(AssetValue);

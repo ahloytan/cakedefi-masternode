@@ -1,14 +1,15 @@
 import { Grid } from '@mui/material';
+import { memo } from 'react';
 
-const CoinHeader = (props) =>  {
+const CoinHeader = ({name, logo, length}) =>  {
 
     return (
         <Grid item xs={6}>     
-            <img className='mx-auto coins' src={props.logo} alt={props.name}/>
-            <h1 className="text-base sm:text-4xl">{props.name}</h1>
-            <h2>({props.len} active)</h2>      
+            <img className='mx-auto coins' src={logo} alt={name}/>
+            <h1 className="text-base sm:text-4xl">{name}</h1>
+            <h2>({length} active)</h2>      
         </Grid>
     );
 }
 
-export default CoinHeader;
+export default memo(CoinHeader);

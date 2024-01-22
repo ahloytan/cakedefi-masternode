@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { Scrollbar } from './scrollbar.jsx';
 import { SideNavItem } from './SideNavItem.jsx';
-import { Web as WebIcon, GitHub, CurrencyBitcoin as CurrencyBitcoinIcon, ArrowOutward as ArrowOutwardIcon  } from '@mui/icons-material';
+import { CubeIcon, CurrencyDollarIcon, ArrowTopRightOnSquareIcon, LinkIcon } from '@heroicons/react/24/solid';
 
 const items = [
   {
@@ -19,7 +19,7 @@ const items = [
     path: 'https://ahloytan.netlify.app/',
     icon: (
       <SvgIcon fontSize="small">
-        <WebIcon />
+        <CubeIcon />
       </SvgIcon>
     )
   },
@@ -28,7 +28,7 @@ const items = [
     path: 'https://github.com/ahloytan',
     icon: (
       <SvgIcon fontSize="small">
-        <GitHub />
+        <ArrowTopRightOnSquareIcon />
       </SvgIcon>
     )
   },
@@ -37,7 +37,7 @@ const items = [
     path: 'https://sentx.io/nft-marketplace/dpgc-0.0.878200/2633',
     icon: (
       <SvgIcon fontSize="small">
-        <CurrencyBitcoinIcon />
+        <CurrencyDollarIcon />
       </SvgIcon>
     )
   },
@@ -46,15 +46,15 @@ const items = [
     path: 'https://magiceden.io/collections/polygon/0x50d2915927255109570d9f72ebeb8cb477df508e',
     icon: (
       <SvgIcon fontSize="small">
-        <CurrencyBitcoinIcon />
+        <CurrencyDollarIcon />
       </SvgIcon>
     )
   },
 ];
 
-export const SideNav = (props) => {
+const SideNav = (props) => {
   const { open, onClose } = props;
-  const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+  const mdUp = useMediaQuery((theme) => theme.breakpoints.up('md'));
 
   const content = (
     <Scrollbar
@@ -178,7 +178,7 @@ export const SideNav = (props) => {
             component="a"
             startIcon={(
               <SvgIcon fontSize="small">
-                <ArrowOutwardIcon />
+                <LinkIcon />
               </SvgIcon>
             )}
             fullWidth
@@ -193,7 +193,7 @@ export const SideNav = (props) => {
     </Scrollbar>
   );
 
-  if (lgUp) {
+  if (mdUp) {
     return (
       <Drawer
         anchor="left"

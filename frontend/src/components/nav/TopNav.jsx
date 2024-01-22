@@ -9,16 +9,15 @@ import {
   useMediaQuery
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
-import { Search as SearchIcon, Menu as MenuIcon, NotificationsNone as NotificationsNoneIcon } from '@mui/icons-material';
-import PropTypes from 'prop-types';
+import { MagnifyingGlassIcon, Bars3Icon, BellIcon } from '@heroicons/react/24/solid';
 import dpgc from '../../assets/dpgc.jpg';
 
 const SIDE_NAV_WIDTH = 240;
 const TOP_NAV_HEIGHT = 64;
 
-export const TopNav = (props) => {
+const TopNav = (props) => {
   const { open } = props;
-  const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+  const lgUp = useMediaQuery((theme) => theme.breakpoints.up('md'));
 
   return (
     <>
@@ -56,14 +55,14 @@ export const TopNav = (props) => {
             {!lgUp && (
               <IconButton onClick={open}>
                 <SvgIcon fontSize="small">
-                  <MenuIcon  />
+                  <Bars3Icon  />
                 </SvgIcon>
               </IconButton>
             )}
             <Tooltip title="Search">
               <IconButton>
                 <SvgIcon fontSize="small">
-                  <SearchIcon />
+                  <MagnifyingGlassIcon />
                 </SvgIcon>
               </IconButton>
             </Tooltip>
@@ -81,7 +80,7 @@ export const TopNav = (props) => {
                   variant="dot"
                 >
                   <SvgIcon fontSize="small">
-                    <NotificationsNoneIcon />
+                    <BellIcon />
                   </SvgIcon>
                 </Badge>
               </IconButton>
@@ -100,11 +99,5 @@ export const TopNav = (props) => {
     </>
   );
 };
-
-
-TopNav.propTypes = {
-  handleDrawerToggle: PropTypes.func
-};
-
 
 export default TopNav;
